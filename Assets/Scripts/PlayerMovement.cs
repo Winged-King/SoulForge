@@ -10,6 +10,10 @@ public class PlayerMovement : MonoBehaviour
     PlayerActionsScript playerActions;
     [SerializeField] CharacterController characterController;
     [SerializeField] GameObject playerBody;
+    [SerializeField] CameraManager cameraOrbit;
+
+    [Header("Camera")]
+    Camera mainCAM;
 
     [Header("Cutscene")]
     [SerializeField] bool inCutscene;
@@ -17,16 +21,18 @@ public class PlayerMovement : MonoBehaviour
     [Header("Movement")]
     [SerializeField] float speed;
     Vector3 playerVelocity;
+    [SerializeField] float rotationSpeed = 500f;
 
     [Header("Jump")]
     [SerializeField] float jumpHeight = 1f;
     [SerializeField] float gravity = -9.8f;
-    [SerializeField] float rotationSpeed = 5f;
+
 
     private void Awake()
     {
         playerActions = new PlayerActionsScript();
         OnEnable();
+        mainCAM = Camera.main;
     }
 
     #region Cutscene Get/Set
@@ -37,10 +43,12 @@ public class PlayerMovement : MonoBehaviour
         if(inCutscene)
         {
             OnDisable();
+            cameraOrbit.OnDisable();
             return;
         }
 
         OnEnable();
+        cameraOrbit.OnEnable();
     }
 
     public bool GetCutscene()
@@ -79,9 +87,9 @@ public class PlayerMovement : MonoBehaviour
 
         if(inputVector.magnitude != 0)
         {
-            float angle = Vector3.SignedAngle(playerBody.transform.forward, movementDir, Vector3.up);
-            Quaternion rot = Quaternion.AngleAxis(angle, Vector3.up);
-            playerBody.transform.rotation = Quaternion.Lerp(playerBody.transform.rotation, playerBody.transform.rotation * rot, Time.deltaTime * rotationSpeed);
+            movementDir = Quaternion.Euler(0.0f, mainCAM.transform.eulerAngles.y, 0.0f) * new Vector3(inputVector.x, 0.0f, inputVector.y);
+            var targetRotation = Quaternion.LookRotation(movementDir, Vector3.up);
+            playerBody.transform.rotation = Quaternion.RotateTowards(playerBody.transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
         }
 
         playerVelocity.y += gravity * Time.deltaTime;
