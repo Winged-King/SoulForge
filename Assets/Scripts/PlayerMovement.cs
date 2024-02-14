@@ -10,7 +10,6 @@ public class PlayerMovement : MonoBehaviour
     PlayerActionsScript playerActions;
     [SerializeField] CharacterController characterController;
     [SerializeField] GameObject playerBody;
-    [SerializeField] CameraManager cameraOrbit;
 
     [Header("Camera")]
     Camera mainCAM;
@@ -43,12 +42,10 @@ public class PlayerMovement : MonoBehaviour
         if(inCutscene)
         {
             OnDisable();
-            cameraOrbit.OnDisable();
             return;
         }
 
         OnEnable();
-        cameraOrbit.OnEnable();
     }
 
     public bool GetCutscene()
