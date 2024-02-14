@@ -26,6 +26,13 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] float jumpHeight = 1f;
     [SerializeField] float gravity = -9.8f;
 
+    [Header("Dashing")]
+    [SerializeField] float dashForce;
+    [SerializeField] float dashDuration;
+    [SerializeField] float dashCoolDown;
+    float dashCoolDownTimer;
+
+
 
     private void Awake()
     {
@@ -59,19 +66,20 @@ public class PlayerMovement : MonoBehaviour
     {
         playerActions.Player.Enable();
         playerActions.Player.Jump.performed += Jump;
+        playerActions.Player.Dash.performed += Dash;
     }
 
     public void OnDisable()
     {
         playerActions.Player.Disable();
         playerActions.Player.Jump.performed -= Jump;
+        playerActions.Player.Dash.performed -= Dash;
     }
     #endregion
 
     private void Update()
     {
         ProcessMovement();
-
     }
 
     private void ProcessMovement()
@@ -104,6 +112,11 @@ public class PlayerMovement : MonoBehaviour
         {
             playerVelocity.y = Mathf.Sqrt(jumpHeight * -3.0f * gravity);
         }
+    }
+
+    public void Dash(InputAction.CallbackContext context)
+    {
+
     }
 
 }

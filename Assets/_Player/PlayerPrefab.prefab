@@ -53,7 +53,7 @@ CharacterController:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Height: 0.75
+  m_Height: 0.735
   m_Radius: 0.25
   m_SlopeLimit: 45
   m_StepOffset: 0.3
@@ -76,9 +76,9 @@ MonoBehaviour:
   playerBody: {fileID: 3542100659413381008}
   inCutscene: 0
   speed: 5
+  rotationSpeed: 500
   jumpHeight: 1
   gravity: -9.8
-  rotationSpeed: 5
 --- !u!1001 &4461228957056881345
 PrefabInstance:
   m_ObjectHideFlags: 0
