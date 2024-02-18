@@ -32,6 +32,14 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] float dashCoolDown;
     float dashCoolDownTimer;
 
+    //Ricky's Code
+    private Animator animator;
+
+    void Start()
+    {
+        animator = GetComponent<Animator>();
+    }
+
 
 
     private void Awake()
