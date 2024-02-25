@@ -35,6 +35,10 @@ public class PlayerMovement : MonoBehaviour
     //Ricky's Code
     private Animator animator;
 
+    [Header("Test - Delete after complete")]
+    [SerializeField] bool test;
+    float testFloat; 
+
     void Start()
     {
         animator = GetComponent<Animator>();
@@ -88,6 +92,15 @@ public class PlayerMovement : MonoBehaviour
     private void Update()
     {
         ProcessMovement();
+
+        if(test == true)
+        {
+            testFloat = 5f;
+        }
+        else
+        {
+            testFloat = 0f;
+        }
     }
 
     private void ProcessMovement()
@@ -110,6 +123,8 @@ public class PlayerMovement : MonoBehaviour
         Vector3 moveInputVal = transform.TransformDirection(movementDir) * speed;
         playerVelocity.x = moveInputVal.x;
         playerVelocity.z = moveInputVal.z;
+
+        animator.SetFloat("Speed", testFloat);
 
         characterController.Move(playerVelocity * Time.deltaTime);
     }
