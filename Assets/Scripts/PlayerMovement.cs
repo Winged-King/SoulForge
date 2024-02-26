@@ -20,8 +20,9 @@ public class PlayerMovement : MonoBehaviour
     [Header("Movement")]
     [SerializeField] float speed;
     Vector3 playerVelocity;
+    private Rigidbody rigidbodyLizard;
     [SerializeField] float rotationSpeed = 500f;
-
+    [SerializeField] float movingSpeed;
     [Header("Jump")]
     [SerializeField] float jumpHeight = 1f;
     [SerializeField] float gravity = -9.8f;
@@ -34,14 +35,19 @@ public class PlayerMovement : MonoBehaviour
 
     //Ricky's Code
     private Animator animator;
+    public bool walking;
 
     [Header("Test - Delete after complete")]
     [SerializeField] bool test;
     float testFloat; 
 
+    //Start animation test
+    //End animation test
+
     void Start()
     {
         animator = GetComponent<Animator>();
+        rigidbodyLizard = GetComponent<Rigidbody>();
     }
 
 
@@ -92,14 +98,78 @@ public class PlayerMovement : MonoBehaviour
     private void Update()
     {
         ProcessMovement();
+        /*
+                if(test == true)
+                {
+                    movingSpeed = 5f;
+                }
+                else
+                {
+                    movingSpeed = 0f;
+                }
+        */
 
-        if(test == true)
-        {
-            testFloat = 5f;
+        if (Input.GetKeyDown(KeyCode.W))
+        {           
+            walking = true;
         }
-        else
+        if (Input.GetKeyUp(KeyCode.W))
         {
-            testFloat = 0f;
+            walking = false;
+        }
+        if (Input.GetKeyDown(KeyCode.A))
+        {
+
+            walking = true;
+        }
+        if (Input.GetKeyUp(KeyCode.A))
+        {
+
+            walking = false;
+        }
+        if (Input.GetKeyDown(KeyCode.S))
+        {
+
+            walking = true;
+
+        }
+        if (Input.GetKeyUp(KeyCode.S))
+        {
+
+            walking = false;
+
+        }
+        if (Input.GetKeyDown(KeyCode.D))
+        {
+
+            walking = true;
+
+        }
+        if (Input.GetKeyUp(KeyCode.D))
+        {
+
+            walking = false;
+
+        }
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+
+            animator.SetTrigger("Jump");
+
+        }
+        if (Input.GetKeyDown(KeyCode.Mouse0))
+        {
+
+            animator.SetTrigger("Attack");
+
+        }
+        if (walking == true)
+        {
+            animator.SetBool("walking", true);
+        }
+        if (walking == false)
+        {
+            animator.SetBool("walking", false);
         }
     }
 
@@ -116,6 +186,7 @@ public class PlayerMovement : MonoBehaviour
             movementDir = Quaternion.Euler(0.0f, mainCAM.transform.eulerAngles.y, 0.0f) * new Vector3(inputVector.x, 0.0f, inputVector.y);
             var targetRotation = Quaternion.LookRotation(movementDir, Vector3.up);
             playerBody.transform.rotation = Quaternion.RotateTowards(playerBody.transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+
         }
 
         playerVelocity.y += gravity * Time.deltaTime;
@@ -124,9 +195,11 @@ public class PlayerMovement : MonoBehaviour
         playerVelocity.x = moveInputVal.x;
         playerVelocity.z = moveInputVal.z;
 
-        animator.SetFloat("Speed", testFloat);
+        testFloat = playerVelocity.y + playerVelocity.z;
 
         characterController.Move(playerVelocity * Time.deltaTime);
+
+        //animator.SetFloat("Speed", movingSpeed);
     }
 
     public void Jump(InputAction.CallbackContext context)
@@ -134,7 +207,9 @@ public class PlayerMovement : MonoBehaviour
         if(characterController.isGrounded)
         {
             playerVelocity.y = Mathf.Sqrt(jumpHeight * -3.0f * gravity);
+            animator.SetTrigger("Jump");
         }
+        animator.ResetTrigger("Jump");
     }
 
     public void Dash(InputAction.CallbackContext context)
